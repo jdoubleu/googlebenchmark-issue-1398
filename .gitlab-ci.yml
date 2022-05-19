@@ -1,0 +1,68 @@
+image: gcc:latest
+
+stages:
+  - build-tests
+  - build-benchmarks
+
+cache:
+  key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
+  paths:
+    - build/
+
+build:tests:gcc:
+  image: gcc
+  stage: build-tests
+  before_script:
+    - apt update && apt -y install cmake make git
+  script:
+    - cmake -B build/ -DCMAKE_BUILD_TYPE=Release
+    - cmake --build build/ --target my_tests --parallel
+    - ./build/my_tests
+
+build:tests:clang:
+  image: silkeh/clang
+  stage: build-tests
+  script:
+    - cmake -B build/ -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_CLANG_TIDY=clang-tidy
+    - cmake --build build/ --target my_tests --parallel
+    - ./build/my_tests
+
+build:tests:msvc:
+  stage: build-tests
+  tags:
+    - windows
+    - msvc
+    - cmake
+  script:
+    - cmake -B build/ -G "Visual Studio 17 2022" -A x64
+    - cmake --build build/ --target my_tests --config Release --parallel
+    - .\build\Release\my_tests.exe
+
+build:benchmarks:gcc:
+  image: gcc
+  stage: build-benchmarks
+  before_script:
+    - apt update && apt -y install cmake make git
+  script:
+    - cmake -B build/ -DCMAKE_BUILD_TYPE=Release
+    - cmake --build build/ --target my_benchmarks --parallel
+    - ./build/my_benchmarks
+
+build:benchmarks:clang:
+  image: silkeh/clang
+  stage: build-benchmarks
+  script:
+    - cmake -B build/ -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_CLANG_TIDY=clang-tidy
+    - cmake --build build/ --target my_benchmarks --parallel
+    - ./build/my_benchmarks
+
+build:benchmarks:msvc:
+  stage: build-benchmarks
+  tags:
+    - windows
+    - msvc
+    - cmake
+  script:
+    - cmake -B build/ -G "Visual Studio 17 2022" -A x64
+    - cmake --build build/ --target my_benchmarks --config Release --parallel
+    - .\build\Release\my_benchmarks.exe
