@@ -1,1 +1,4 @@
 build/
+
+/google-benchmark/
+/bazelisk-linux-amd64
