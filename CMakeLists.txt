@@ -14,5 +14,8 @@ FetchContent_Declare(google-benchmark
 
 FetchContent_MakeAvailable(googletest google-benchmark)
 
-add_executable(googletest_issue main.cpp)
-target_link_libraries(googletest_issue gtest_main benchmark::benchmark_main)
+add_executable(my_tests tests.cpp)
+target_link_libraries(my_tests gtest_main)
+
+add_executable(my_benchmarks benchmarks.cpp)
+target_link_libraries(my_benchmarks benchmark::benchmark_main)
