@@ -19,6 +19,16 @@ build:tests:gcc:
     - cmake --build build/ --target my_tests --parallel
     - ./build/my_tests
 
+build:tests:gcc:ubuntu:
+  image: ubuntu:22.04
+  stage: build-tests
+  before_script:
+    - apt update && apt -y install g++-12 cmake make git
+  script:
+    - cmake -B build/ -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER="g++-12"
+    - cmake --build build/ --target my_tests --parallel
+    - ./build/my_tests
+
 build:tests:clang:
   image: silkeh/clang
   stage: build-tests
@@ -45,6 +55,16 @@ build:benchmarks:gcc:
     - apt update && apt -y install cmake make git
   script:
     - cmake -B build/ -DCMAKE_BUILD_TYPE=Release
+    - cmake --build build/ --target my_benchmarks --parallel
+    - ./build/my_benchmarks
+
+build:benchmarks:gcc:buntu:
+  image: ubuntu:22.04
+  stage: build-benchmarks
+  before_script:
+    - apt update && apt -y install g++-12 cmake make git
+  script:
+    - cmake -B build/ -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER="g++-12"
     - cmake --build build/ --target my_benchmarks --parallel
     - ./build/my_benchmarks
 
