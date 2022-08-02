@@ -86,3 +86,13 @@ build:benchmarks:msvc:
     - cmake -B build/ -G "Visual Studio 17 2022" -A x64
     - cmake --build build/ --target my_benchmarks --config Release --parallel
     - .\build\Release\my_benchmarks.exe
+
+build:libtest:gcc:
+  image: gcc
+  stage: build-tests
+  before_script:
+    - apt update && apt -y install cmake make git
+  script:
+    - cmake -B build/ -DCMAKE_BUILD_TYPE=Release
+    - cmake --build build/ --target my_libtest --parallel
+    - ./build/my_libtest

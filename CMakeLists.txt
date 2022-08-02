@@ -19,3 +19,8 @@ target_link_libraries(my_tests gtest_main)
 
 add_executable(my_benchmarks benchmarks.cpp)
 target_link_libraries(my_benchmarks benchmark::benchmark_main)
+
+add_executable(my_libtest libtest.cpp)
+target_compile_options(my_libtest PRIVATE
+            $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+            $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>)

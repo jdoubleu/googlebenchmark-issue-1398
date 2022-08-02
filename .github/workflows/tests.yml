@@ -54,3 +54,18 @@ jobs:
           cmake --build build/ --target my_tests --config Release --parallel
       - name: run
         run: .\build\Release\my_tests.exe
+
+  libtest-gcc:
+    runs-on: ubuntu-latest
+    container: gcc:12
+    steps:
+      - name: Install CMake
+        run: apt update -qq && apt -y install cmake make git
+      - uses: actions/checkout@v2
+      - name: build
+        run: |
+          cmake -B build/ -DCMAKE_BUILD_TYPE=Release
+          cmake --build build/ --target my_libtest --parallel
+      - name: run
+        run: |
+          ./build/my_libtest
